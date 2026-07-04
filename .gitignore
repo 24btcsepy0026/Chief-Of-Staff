@@ -1,0 +1,25 @@
+# Secrets & Credentials
+.env
+token.json
+credentials.json
+.streamlit/secrets.toml
+
+# Virtual Environments
+.venv/
+venv/
+env/
+
+# Python Cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Local Logs & Dynamic State Caches
+action_log.json
+draft_history.json
+triage_cache.json
+approved_drafts.json
+
+# OS Files
+.DS_Store
+Thumbs.db

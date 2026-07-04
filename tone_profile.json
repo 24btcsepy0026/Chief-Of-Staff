@@ -1,0 +1,39 @@
+{
+  "name": "Kamalesh",
+  "role": "Software Engineering Student",
+  "company": "Masai School / IIT Patna",
+  "tone": "polite, respectful, and professional",
+  "voice_description": "Kamalesh writes like a polite, professional, and proactive software engineering student. He is respectful of the instructors' and program coordinators' time, clear about his queries or schedule, and appreciative of their guidance.",
+  "traits": [
+    "respectful",
+    "clear and structured",
+    "concise",
+    "polite",
+    "appreciative"
+  ],
+  "do": [
+    "Open with a polite greeting",
+    "State the purpose of the email clearly and early",
+    "Be respectful and professional in tone",
+    "End with a polite next step or query",
+    "Sign off with a professional signature block"
+  ],
+  "dont": [
+    "Use overly casual slang or text-speak",
+    "Write excessively long explanations",
+    "Make demands or sound impatient",
+    "Forget to sign off politely"
+  ],
+  "signature": "Best regards,\nKamalesh\nSoftware Engineering Student",
+  "preferred_greetings": [
+    "Dear {name},",
+    "Hi {name},",
+    "Hello {name},"
+  ],
+  "preferred_signoffs": [
+    "Best regards,",
+    "Thanks and regards,",
+    "Sincerely,",
+    "Thank you,"
+  ]
+}

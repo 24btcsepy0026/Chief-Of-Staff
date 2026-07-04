@@ -1,0 +1,57 @@
+[
+  {
+    "id": "sample-001",
+    "subject": "🚨 PRODUCTION DOWN: Checkout API returning 500s since 9:42 AM",
+    "messages": [
+      {
+        "from": "pagerduty@acmecorp.com",
+        "date": "2026-06-27 09:43 AM",
+        "body": "Hi Rahul,\n\nOur checkout API has been returning 500 errors for ~15% of requests since 9:42 AM ET. Customer Support is getting flooded with tickets and we've already lost an estimated $12K in abandoned carts in the first hour.\n\nEngineering is paged and investigating, but we need a decision from Product ASAP on whether to roll back the deploy that went out at 9:30 AM. Rolling back will fix the issue but will also undo this morning's pricing-rule update.\n\nCan you jump on the #incident-war-room channel right now? We need your call in the next 10 minutes.\n\nThanks,\nOn-Call SRE"
+      }
+    ]
+  },
+  {
+    "id": "sample-002",
+    "subject": "Quick note — Q3 performance feedback for you",
+    "messages": [
+      {
+        "from": "diane.tanaka@acmecorp.com",
+        "date": "2026-06-26 05:30 PM",
+        "body": "Hi Rahul,\n\nWanted to send a heads-up before the formal review cycle kicks off: I'd like to discuss your Q3 feedback with you sometime in the next two weeks. Nothing alarming — overall it's been a really strong quarter, especially the way you drove the onboarding redesign to launch.\n\nThere are a couple of growth areas I'd like to dig into around cross-functional comms and prioritization under pressure, but I want to make sure we discuss them in person rather than over email.\n\nCan you send me 2-3 time slots that work for you between July 1 and July 8? I'll keep it to 45 minutes.\n\nBest,\nDiane"
+      }
+    ]
+  },
+  {
+    "id": "sample-003",
+    "subject": "Eng standup notes — Wed Jun 26",
+    "messages": [
+      {
+        "from": "eng-distro@acmecorp.com",
+        "date": "2026-06-26 10:15 AM",
+        "body": "Team,\n\nQuick recap from this morning's standup (no action required, FYI only):\n\n• Checkout latency — Sarah's team added a new index, saw p95 drop from 820ms → 310ms\n• Mobile redesign — first round of QA findings in, ~14 bugs logged, mostly small\n• Search infra migration — pushed to next sprint due to onboarding incident\n• New hire, Priya M., starts Monday on the Growth squad\n\nFull notes in the team wiki. Next standup Friday 10am.\n\n— Eng Leadership"
+      }
+    ]
+  },
+  {
+    "id": "sample-004",
+    "subject": "Re: Vendor contract renewal — Acme Analytics (due July 15)",
+    "messages": [
+      {
+        "from": "contracts@acme-analytics.com",
+        "date": "2026-06-25 02:14 PM",
+        "body": "Hello Rahul,\n\nFollowing up on the renewal paperwork we sent over on June 18. Your annual subscription with Acme Analytics is set to auto-renew on July 15, 2026 at the current rate of $24,000/year unless we hear back from you.\n\nA couple of options:\n  1. Renew at the current terms (just countersign the attached PDF)\n  2. Move to our new Growth tier at $19,200/year if you're willing to commit to a 2-year term\n  3. Cancel — no action required if you want to let it lapse\n\nCould you let me know how you'd like to proceed by end of next week?\n\nBest,\nMegan Reyes\nAcme Contracts Team"
+      }
+    ]
+  },
+  {
+    "id": "sample-005",
+    "subject": "Design review meeting — new onboarding flow (30 min?)",
+    "messages": [
+      {
+        "from": "jorge.mendez@acmecorp.com",
+        "date": "2026-06-27 08:50 AM",
+        "body": "Hey Rahul,\n\nFigma links for the redesigned onboarding flow are ready for your review (links below). I think there are 3 or 4 places where I want your PM-brain gut-check before we lock the spec and hand off to eng.\n\nCould we grab 30 minutes this week to walk through it? Tuesday afternoon or Thursday morning both work for me. If neither works, happy to send async Loom comments instead.\n\n• Lo-fi wireframes: https://figma.com/file/abc123/onboarding-v2\n• Hi-fi mocks (screens 1-3): https://figma.com/file/def456/onboarding-hifi\n\nThanks!\nJorge"
+      }
+    ]
+  }
+]

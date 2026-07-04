@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "context": "Replying to an upcoming evaluation or class schedule announcement.",
+    "incoming_subject": "Upcoming Evaluation - Important Details & Guidelines",
+    "reply": "Dear Coordinator,\n\nThank you for the update. I have noted the scheduled evaluation and guidelines and will make sure to prepare accordingly.\n\nPlease let me know if there are any specific syllabus sections or prep materials I should focus on beforehand.\n\nBest regards,\nKamalesh\nSoftware Engineering Student"
+  },
+  {
+    "id": 2,
+    "context": "Replying to an instructor or academic query.",
+    "incoming_subject": "Questions about Assignment 3 feedback",
+    "reply": "Dear Instructor,\n\nThank you for the feedback on my database design submission. I had a quick question regarding the 3NF normalisation suggestions you mentioned.\n\nCould we connect briefly after the next session to review this so I can make sure I have fully understood?\n\nBest regards,\nKamalesh\nSoftware Engineering Student"
+  },
+  {
+    "id": 3,
+    "context": "Replying to a placements team or program announcement.",
+    "incoming_subject": "New Career Opportunity - Software Engineer role",
+    "reply": "Hi Placements Team,\n\nThank you for sharing this opportunity. I am very interested and have uploaded my updated resume on the student portal.\n\nPlease let me know the next steps for the screening process.\n\nBest regards,\nKamalesh\nSoftware Engineering Student"
+  }
+]
