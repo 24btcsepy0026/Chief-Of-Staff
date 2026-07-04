@@ -23,6 +23,19 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 
 def _get_credentials():
     creds = None
+    
+    # --- ADDED FOR STREAMLIT CLOUD COMPATIBILITY ---
+    if not os.path.exists(TOKEN_PATH):
+        try:
+            import streamlit as st
+            if "google_token" in st.secrets:
+                with open(TOKEN_PATH, "w") as f:
+                    import json
+                    f.write(json.dumps(dict(st.secrets["google_token"])))
+        except Exception:
+            pass
+    # -----------------------------------------------
+
     if os.path.exists(TOKEN_PATH):
         try:
             creds = Credentials.from_authorized_user_file(TOKEN_PATH, SCOPES)
