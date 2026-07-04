@@ -119,12 +119,21 @@ def fetch_threads(max_results: int = 20) -> list[dict]:
         last_headers = last_msg.get('payload', {}).get('headers', [])
         message_id = next((h['value'] for h in last_headers if h['name'].lower() == 'message-id'), None)
             
+        raw_date = next((h['value'] for h in headers if h['name'].lower() == 'date'), '')
+        try:
+            import email.utils
+            parsed_dt = email.utils.parsedate_to_datetime(raw_date)
+            formatted_date = parsed_dt.strftime("%Y-%m-%d %I:%M %p")
+        except Exception:
+            formatted_date = raw_date if raw_date else None
+            
         result_list.append({
             'thread_id': thread_id,
             'sender': html.unescape(sender),
             'from': html.unescape(sender),
             'subject': html.unescape(subject),
             'snippet': html.unescape(snippet),
+            'date': formatted_date,
             'message_id': message_id
         })
         
