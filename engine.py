@@ -119,16 +119,20 @@ def fetch_threads(max_results: int = 20) -> list[dict]:
         last_headers = last_msg.get('payload', {}).get('headers', [])
         message_id = next((h['value'] for h in last_headers if h['name'].lower() == 'message-id'), None)
         
-        raw_date = next((h['value'] for h in headers if h['name'].lower() == 'date'), '')
         try:
-            import email.utils
+            from datetime import datetime
             from zoneinfo import ZoneInfo
-            parsed_dt = email.utils.parsedate_to_datetime(raw_date)
-            # Convert to Indian Standard Time (IST)
-            parsed_dt = parsed_dt.astimezone(ZoneInfo("Asia/Kolkata"))
-            formatted_date = parsed_dt.strftime("%Y-%m-%d %I:%M %p")
+            
+            epoch_ms = int(first_msg.get('internalDate', 0))
+            if epoch_ms > 0:
+                # internalDate is in epoch milliseconds
+                parsed_dt = datetime.fromtimestamp(epoch_ms / 1000.0, tz=ZoneInfo("UTC"))
+                parsed_dt = parsed_dt.astimezone(ZoneInfo("Asia/Kolkata"))
+                formatted_date = parsed_dt.strftime("%Y-%m-%d %I:%M %p")
+            else:
+                formatted_date = None
         except Exception:
-            formatted_date = raw_date if raw_date else None
+            formatted_date = None
             
         result_list.append({
             'thread_id': thread_id,
