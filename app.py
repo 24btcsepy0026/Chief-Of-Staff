@@ -658,7 +658,7 @@ def render_phase_inbox_triage():
 
             st.success("\u2705 Pulled & triaged " + str(len(st.session_state.triaged)) + " threads.")
         except FileNotFoundError as e:
-            st.error("\u274C Missing file: `" + str(e.filename) + "`. Make sure it exists in the project root.")
+            st.error("\u274C " + str(e))
         except Exception as e:
             st.error("\u274C Failed to pull threads: " + str(e))
 
