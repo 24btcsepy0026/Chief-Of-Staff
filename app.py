@@ -1462,7 +1462,9 @@ def generate_proof_html():
             icon = "📤" if atype == "SENT" else "📅" if atype == "BOOKED" else ""
             ts = entry.get("timestamp", "")
             try:
+                from zoneinfo import ZoneInfo
                 dt = datetime.fromisoformat(ts.replace("Z", "+00:00"))
+                dt = dt.astimezone(ZoneInfo("Asia/Kolkata"))
                 ts = dt.strftime("%b %d %I:%M %p")
             except ValueError:
                 pass
