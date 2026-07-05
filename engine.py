@@ -86,8 +86,19 @@ def fetch_threads(max_results: int = 20) -> list[dict]:
     """Returns last N threads as: thread_id, sender, subject, snippet, message_id"""
     service = get_gmail_service()
     
-    # Default to pulling threads from the last 2 days (stretch goal)
-    results = service.users().threads().list(userId="me", maxResults=max_results, q="newer_than:2d").execute()
+    try:
+        # Default to pulling threads from the last 2 days (stretch goal)
+        results = service.users().threads().list(userId="me", maxResults=max_results, q="newer_than:2d").execute()
+    except Exception as e:
+        if "invalid_grant" in str(e):
+            if os.path.exists(TOKEN_PATH):
+                try:
+                    os.remove(TOKEN_PATH)
+                except Exception:
+                    pass
+            raise Exception("Google Auth token expired or revoked. It has been cleared. Please press 'Run Full Pipeline' again to re-authenticate.") from e
+        raise e
+        
     threads = results.get('threads', [])
     
     # Dynamic fallback: if we got fewer threads than requested, expand timeframe to 7 days
