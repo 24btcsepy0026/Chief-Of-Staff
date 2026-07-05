@@ -5,7 +5,7 @@ app.py - The Draft Desk
 Unified Streamlit UI for the AI Email Ghostwriter pipeline.
 
 Phases (sidebar navigation):
-  1. Inbox & Triage     - fetch threads, classify priorities
+  1. Inbox And Triage     - fetch threads, classify priorities
   2. Draft Generation   - generate on-brand AI reply drafts
   3. Approval Gate      - human-in-the-loop review: approve/edit/reject
   4. Export Proof       - download proof-of-work bundle (Markdown + HTML)
@@ -41,7 +41,7 @@ st.set_page_config(
 HERE            = Path(__file__).parent
 load_dotenv(HERE / ".env", override=True)
 SAMPLE_FILE     = HERE / "sample_threads.json"
-PHASES          = ["Inbox & Triage", "Draft Generation", "Approval Gate", "Export Proof"]
+PHASES          = ["Inbox And Triage", "Draft Generation", "Approval Gate", "Export Proof"]
 PRIORITY_ORDER  = ["URGENT", "NEEDS-REPLY", "FYI", "IGNORE"]
 PRIORITY_EMOJI  = {"URGENT": "\U0001F6A8", "NEEDS-REPLY": "\u21A9\uFE0F",
                    "FYI": "\u2139\uFE0F",  "IGNORE": "\u0001\uFE0F"}
@@ -155,7 +155,7 @@ DEFAULTS = {
     "meetings_info":  {},     # dict[thread_id -> dict]
     "booked_meetings": {},    # dict[thread_id -> dict]
     "booked":         {},     # dict[thread_id -> dict] -- track booked events
-    "current_phase":  "Inbox & Triage",
+    "current_phase":  "Inbox And Triage",
     "source":         "Sample Threads",
     "last_pulled_at": None,
     "generation_counts": {},  # dict[thread_id -> int]
@@ -584,7 +584,7 @@ with st.sidebar:
             st.caption("Last pull: " + str(st.session_state.last_pulled_at))
 
 # ---------------------------------------------------------------------------
-# PHASE 1 — Inbox & Triage
+# PHASE 1 — Inbox And Triage
 # ---------------------------------------------------------------------------
 
 def render_phase_inbox_triage():
@@ -1644,7 +1644,7 @@ if st.session_state.pipeline_running:
 else:
     phase = st.session_state.current_phase
 
-    if phase == "Inbox & Triage":
+    if phase == "Inbox And Triage":
         render_phase_inbox_triage()
     elif phase == "Draft Generation":
         render_phase_draft_generation()
