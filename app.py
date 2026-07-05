@@ -589,7 +589,7 @@ with st.sidebar:
 
 def render_phase_inbox_triage():
     st.markdown(
-        '<div class="phase-header">\U0001F4E5 Inbox &amp; Triage</div>'
+        '<div class="phase-header">\U0001F4E5 Inbox Andamp; Triage</div>'
         '<div class="phase-sub">Pull threads from your source and let Gemini classify them.</div>',
         unsafe_allow_html=True,
     )
