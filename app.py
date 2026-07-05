@@ -1634,7 +1634,9 @@ def render_phase_export_proof():
                 st.markdown(f"`{entry.get('detail', '')}`")
             with c4:
                 try:
+                    from zoneinfo import ZoneInfo
                     dt = datetime.fromisoformat(entry.get("timestamp", "").replace("Z", "+00:00"))
+                    dt = dt.astimezone(ZoneInfo("Asia/Kolkata"))
                     st.caption(dt.strftime("%b %d %I:%M %p"))
                 except ValueError:
                     st.caption(entry.get("timestamp", ""))
