@@ -1352,7 +1352,8 @@ def render_phase_approval_gate():
 
 def generate_proof_markdown():
     """Build a Markdown proof-of-work document for all approved drafts."""
-    now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    from zoneinfo import ZoneInfo
+    now = datetime.now(ZoneInfo("Asia/Kolkata")).strftime("%Y-%m-%d %H:%M")
     thread_lookup = {t.get("id"): t for t in st.session_state.triaged}
 
     lines = [
@@ -1403,7 +1404,8 @@ def generate_proof_markdown():
 
 def generate_proof_html():
     """Build a styled dark-theme HTML proof-of-work document."""
-    now = datetime.now().strftime("%Y-%m-%d %H:%M")
+    from zoneinfo import ZoneInfo
+    now = datetime.now(ZoneInfo("Asia/Kolkata")).strftime("%Y-%m-%d %H:%M")
     thread_lookup = {t.get("id"): t for t in st.session_state.triaged}
 
     cards_html = ""
@@ -1542,7 +1544,8 @@ def render_phase_export_proof():
     s1, s2, s3 = st.columns(3)
     s1.metric("\u2705 Approved Drafts", n_approved)
     s2.metric("\u274C Rejected",        n_rejected)
-    s3.metric("\U0001F4C5 Generated",   datetime.now().strftime("%b %d, %Y"))
+    from zoneinfo import ZoneInfo
+    s3.metric("\U0001F4C5 Generated",   datetime.now(ZoneInfo("Asia/Kolkata")).strftime("%b %d, %Y"))
 
     st.markdown("---")
 
