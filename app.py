@@ -1353,7 +1353,7 @@ def render_phase_approval_gate():
 def generate_proof_markdown():
     """Build a Markdown proof-of-work document for all approved drafts."""
     from zoneinfo import ZoneInfo
-    now = datetime.now(ZoneInfo("Asia/Kolkata")).strftime("%Y-%m-%d %H:%M")
+    now = datetime.now(ZoneInfo("Asia/Kolkata")).strftime("%Y-%m-%d %I:%M %p")
     thread_lookup = {t.get("id"): t for t in st.session_state.triaged}
 
     lines = [
@@ -1405,7 +1405,7 @@ def generate_proof_markdown():
 def generate_proof_html():
     """Build a styled dark-theme HTML proof-of-work document."""
     from zoneinfo import ZoneInfo
-    now = datetime.now(ZoneInfo("Asia/Kolkata")).strftime("%Y-%m-%d %H:%M")
+    now = datetime.now(ZoneInfo("Asia/Kolkata")).strftime("%Y-%m-%d %I:%M %p")
     thread_lookup = {t.get("id"): t for t in st.session_state.triaged}
 
     cards_html = ""
