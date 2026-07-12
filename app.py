@@ -633,6 +633,8 @@ def render_phase_inbox_triage():
                 
             if "code" in st.query_params:
                 try:
+                    if "oauth_code_verifier" in st.session_state:
+                        flow.code_verifier = st.session_state["oauth_code_verifier"]
                     flow.fetch_token(code=st.query_params["code"])
                     st.session_state.google_creds = flow.credentials
                     st.query_params.clear()
@@ -642,6 +644,8 @@ def render_phase_inbox_triage():
                     st.query_params.clear()
                     
             auth_url, _ = flow.authorization_url(prompt='consent', access_type='offline')
+            st.session_state["oauth_code_verifier"] = getattr(flow, "code_verifier", None)
+            
             st.info("👋 Welcome! This is a multi-user Chief of Staff app. Please sign in with your Google account to securely manage your inbox.")
             st.link_button("Sign in with Google", auth_url, type="primary")
             return False
