@@ -601,6 +601,10 @@ def render_phase_inbox_triage():
         from google_auth_oauthlib.flow import Flow
         import os
 
+        @st.cache_resource
+        def get_oauth_verifiers():
+            return {}
+            
         def do_oauth_flow():
             if os.path.exists("token.json"):
                 return True
@@ -631,10 +635,14 @@ def render_phase_inbox_triage():
                 st.error(f"OAuth config error: {e}")
                 return False
                 
+            verifiers = get_oauth_verifiers()
+            
             if "code" in st.query_params:
                 try:
-                    if "oauth_code_verifier" in st.session_state:
-                        flow.code_verifier = st.session_state["oauth_code_verifier"]
+                    returned_state = st.query_params.get("state")
+                    if returned_state and returned_state in verifiers:
+                        flow.code_verifier = verifiers[returned_state]
+                        
                     flow.fetch_token(code=st.query_params["code"])
                     st.session_state.google_creds = flow.credentials
                     st.query_params.clear()
@@ -643,8 +651,8 @@ def render_phase_inbox_triage():
                     st.error(f"Failed to fetch token: {e}")
                     st.query_params.clear()
                     
-            auth_url, _ = flow.authorization_url(prompt='consent', access_type='offline')
-            st.session_state["oauth_code_verifier"] = getattr(flow, "code_verifier", None)
+            auth_url, state = flow.authorization_url(prompt='consent', access_type='offline')
+            verifiers[state] = getattr(flow, "code_verifier", None)
             
             st.info("👋 Welcome! This is a multi-user Chief of Staff app. Please sign in with your Google account to securely manage your inbox.")
             st.link_button("Sign in with Google", auth_url, type="primary")
