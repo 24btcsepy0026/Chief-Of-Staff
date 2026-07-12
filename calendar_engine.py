@@ -18,11 +18,10 @@ SCOPES = [
     "https://www.googleapis.com/auth/calendar"
 ]
 
-def _build_calendar_service():
+def _build_calendar_service(creds=None):
     """Build a Google Calendar v3 service using shared credentials."""
-    from engine import _get_credentials
-    creds = _get_credentials()
-    return build("calendar", "v3", credentials=creds, cache_discovery=False)
+    from engine import get_calendar_service
+    return get_calendar_service(creds)
 
 def parse_meeting_request(thread: dict) -> dict:
     """Use Gemini to extract structured meeting request details from the email thread with model fallbacks."""
@@ -107,10 +106,10 @@ def parse_meeting_request(thread: dict) -> dict:
         "raw": response.text if 'response' in locals() else ""
     }
 
-def check_availability(time_min: str, time_max: str) -> bool:
-    """Check if a time window on primary calendar is free using FreeBusy query."""
+def check_availability(time_min: str, time_max: str, creds=None) -> bool:
+    """Check if the user is free during the given time block."""
     try:
-        service = _build_calendar_service()
+        service = _build_calendar_service(creds)
         
         # Append "Z" to times that lack timezone info
         if not time_min.endswith("Z") and "+" not in time_min and "-" not in time_min[10:]:
@@ -134,7 +133,7 @@ def check_availability(time_min: str, time_max: str) -> bool:
         print(f"Error checking availability: {e}")
         return False
 
-def find_free_slot(proposed_times: list, duration_minutes: int) -> str | None:
+def find_free_slot(proposed_times: list, duration_minutes: int, creds=None) -> str | None:
     """Find the first available time slot from the proposed times list."""
     from datetime import timezone
     for pt in proposed_times:
@@ -154,17 +153,17 @@ def find_free_slot(proposed_times: list, duration_minutes: int) -> str | None:
             time_min = start_utc.strftime("%Y-%m-%dT%H:%M:%SZ")
             time_max = end_utc.strftime("%Y-%m-%dT%H:%M:%SZ")
             
-            if check_availability(time_min, time_max):
+            if check_availability(time_min, time_max, creds):
                 return pt
         except Exception as e:
             print(f"Skipped malformed proposed time '{pt}': {e}")
             continue
     return None
 
-def create_event(summary: str, start_time: str, duration_minutes: int, attendees: list, description: str = "") -> dict:
+def create_event(summary: str, start_time: str, duration_minutes: int, attendees: list, description: str = "", creds=None) -> dict:
     """Create a Google Calendar event on primary calendar."""
     from datetime import timezone
-    service = _build_calendar_service()
+    service = _build_calendar_service(creds)
     
     start_norm = start_time
     if not start_norm.endswith("Z") and "+" not in start_norm and "-" not in start_norm[10:]:

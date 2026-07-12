@@ -206,7 +206,7 @@ def _normalize_sample_thread(t):
 
 def _fetch_gmail_threads(max_results=20):
     from engine import fetch_threads
-    return fetch_threads(max_results=max_results)
+    return fetch_threads(max_results=max_results, creds=st.session_state.get("google_creds"))
 
 
 def _triage_gmail_threads(raw_threads):
@@ -598,6 +598,57 @@ def render_phase_inbox_triage():
     button_label = "\U0001F504 Pull & Triage Threads  (" + src + ")"
 
     if src == "Gmail Threads":
+        from google_auth_oauthlib.flow import Flow
+        import os
+
+        def do_oauth_flow():
+            if os.path.exists("token.json"):
+                return True
+            if "google_creds" in st.session_state and st.session_state.google_creds and st.session_state.google_creds.valid:
+                return True
+            if "google_oauth" not in st.secrets:
+                st.error("Missing `[google_oauth]` in Streamlit Secrets. Please add your `credentials.json` contents.")
+                return False
+            
+            client_config = dict(st.secrets["google_oauth"])
+            try:
+                if "web" in client_config:
+                    redirect_uri = client_config["web"]["redirect_uris"][0]
+                else:
+                    redirect_uri = client_config["installed"]["redirect_uris"][0]
+            except Exception:
+                redirect_uri = "https://chief-of-staff.streamlit.app"
+                
+            SCOPES = [
+                "https://www.googleapis.com/auth/gmail.modify",
+                "https://www.googleapis.com/auth/gmail.settings.basic",
+                "https://www.googleapis.com/auth/gmail.send",
+                "https://www.googleapis.com/auth/calendar"
+            ]
+            try:
+                flow = Flow.from_client_config(client_config, scopes=SCOPES, redirect_uri=redirect_uri)
+            except Exception as e:
+                st.error(f"OAuth config error: {e}")
+                return False
+                
+            if "code" in st.query_params:
+                try:
+                    flow.fetch_token(code=st.query_params["code"])
+                    st.session_state.google_creds = flow.credentials
+                    st.query_params.clear()
+                    st.rerun()
+                except Exception as e:
+                    st.error(f"Failed to fetch token: {e}")
+                    st.query_params.clear()
+                    
+            auth_url, _ = flow.authorization_url(prompt='consent', access_type='offline')
+            st.info("👋 Welcome! This is a multi-user Chief of Staff app. Please sign in with your Google account to securely manage your inbox.")
+            st.link_button("Sign in with Google", auth_url, type="primary")
+            return False
+
+        if not do_oauth_flow():
+            return
+
         c1, c2 = st.columns([1, 3])
         def _update_max_n():
             st.session_state.max_n_val = st.session_state.max_n_widget
@@ -1147,7 +1198,8 @@ def render_phase_approval_gate():
                                                         start_time=free_slot,
                                                         duration_minutes=details.get("duration_minutes", 30),
                                                         attendees=details.get("attendees", []),
-                                                        description=f"Automated booking for thread: {subject}"
+                                                        description=f"Automated booking for thread: {subject}",
+                                                        creds=st.session_state.get("google_creds")
                                                     )
                                                     st.session_state.booked[tid] = evt
                                                     if "id" in evt:
@@ -1204,7 +1256,8 @@ def render_phase_approval_gate():
                                         to=recipient,
                                         subject=subject,
                                         body=st.session_state.approved[tid],
-                                        message_id=thread.get("message_id")
+                                        message_id=thread.get("message_id"),
+                                        creds=st.session_state.get("google_creds")
                                     )
                                     real_id = result.get("id") or result.get("message_id") or "Success"
                                     st.session_state.setdefault("sent_threads", set()).add(tid)

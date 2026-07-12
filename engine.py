@@ -24,16 +24,10 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 def _get_credentials():
     creds = None
     
-    # --- ADDED FOR STREAMLIT CLOUD COMPATIBILITY ---
-    if not os.path.exists(TOKEN_PATH):
-        try:
-            import streamlit as st
-            if "google_token" in st.secrets:
-                with open(TOKEN_PATH, "w") as f:
-                    import json
-                    f.write(json.dumps(dict(st.secrets["google_token"])))
-        except Exception:
-            pass
+    # --- MULTI-TENANT MODE ---
+    # We no longer pull a hardcoded single-user token from st.secrets.
+    # The application now expects dynamic credentials from the frontend login flow.
+    # We keep the local os.path.exists(TOKEN_PATH) fallback solely for local CLI testing.
     # -----------------------------------------------
 
     if os.path.exists(TOKEN_PATH):
@@ -76,15 +70,15 @@ def _get_credentials():
 
     return creds
 
-def get_gmail_service():
-    return build("gmail", "v1", credentials=_get_credentials())
+def get_gmail_service(creds=None):
+    return build("gmail", "v1", credentials=creds or _get_credentials())
 
-def get_calendar_service():
-    return build("calendar", "v3", credentials=_get_credentials())
+def get_calendar_service(creds=None):
+    return build("calendar", "v3", credentials=creds or _get_credentials())
 
-def fetch_threads(max_results: int = 20) -> list[dict]:
+def fetch_threads(max_results: int = 20, creds=None) -> list[dict]:
     """Returns last N threads as: thread_id, sender, subject, snippet, message_id"""
-    service = get_gmail_service()
+    service = get_gmail_service(creds)
     
     try:
         # Default to pulling threads from the last 2 days (stretch goal)
@@ -157,9 +151,9 @@ def fetch_threads(max_results: int = 20) -> list[dict]:
         
     return result_list
 
-def send_reply(thread_id: str, to: str, subject: str, body: str, message_id: str = None) -> dict:
+def send_reply(thread_id: str, to: str, subject: str, body: str, message_id: str = None, creds=None) -> dict:
     """Send a reply to a thread using the Gmail API, setting appropriate threading headers."""
-    service = get_gmail_service()
+    service = get_gmail_service(creds)
     
     msg = MIMEText(body, "plain", "utf-8")
     msg["To"] = to
@@ -186,7 +180,7 @@ def send_reply(thread_id: str, to: str, subject: str, body: str, message_id: str
         
     return sent
 
-def send_approved_drafts():
+def send_approved_drafts(creds=None):
     """Reads approved_drafts.json, sends each unsent draft, and updates the file."""
     approved_file = HERE / "approved_drafts.json"
     if not approved_file.exists():
@@ -231,7 +225,8 @@ def send_approved_drafts():
                     to=to,
                     subject=subject,
                     body=body,
-                    message_id=message_id
+                    message_id=message_id,
+                    creds=creds
                 )
                 r["sent_at"] = datetime.now().isoformat(timespec="seconds")
                 r["message_id"] = sent.get("id") or sent.get("message_id")
