@@ -656,7 +656,7 @@ def render_phase_inbox_triage():
             
             st.info("👋 Welcome! This is a multi-user Chief of Staff app. Please sign in with your Google account to securely manage your inbox.")
             st.markdown(
-                f'<a href="{auth_url}" target="_top" '
+                f'<a href="{auth_url}" target="_blank" '
                 f'style="display: inline-block; padding: 0.5rem 1rem; '
                 f'background-color: #FF4B4B; color: white; text-decoration: none; '
                 f'border-radius: 0.5rem; font-weight: 600;">'
