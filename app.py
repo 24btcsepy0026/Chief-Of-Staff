@@ -655,7 +655,14 @@ def render_phase_inbox_triage():
             verifiers[state] = getattr(flow, "code_verifier", None)
             
             st.info("👋 Welcome! This is a multi-user Chief of Staff app. Please sign in with your Google account to securely manage your inbox.")
-            st.link_button("Sign in with Google", auth_url, type="primary")
+            st.markdown(
+                f'<a href="{auth_url}" target="_self" '
+                f'style="display: inline-block; padding: 0.5rem 1rem; '
+                f'background-color: #FF4B4B; color: white; text-decoration: none; '
+                f'border-radius: 0.5rem; font-weight: 600;">'
+                f'Sign in with Google</a>',
+                unsafe_allow_html=True
+            )
             return False
 
         if not do_oauth_flow():

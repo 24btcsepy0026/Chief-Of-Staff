@@ -81,8 +81,7 @@ def fetch_threads(max_results: int = 20, creds=None) -> list[dict]:
     service = get_gmail_service(creds)
     
     try:
-        # Default to pulling threads from the last 2 days (stretch goal)
-        results = service.users().threads().list(userId="me", maxResults=max_results, q="newer_than:2d").execute()
+        results = service.users().threads().list(userId="me", maxResults=max_results).execute()
     except Exception as e:
         if "invalid_grant" in str(e):
             if os.path.exists(TOKEN_PATH):
@@ -94,11 +93,6 @@ def fetch_threads(max_results: int = 20, creds=None) -> list[dict]:
         raise e
         
     threads = results.get('threads', [])
-    
-    # Dynamic fallback: if we got fewer threads than requested, expand timeframe to 7 days
-    if len(threads) < max_results:
-        results = service.users().threads().list(userId="me", maxResults=max_results, q="newer_than:7d").execute()
-        threads = results.get('threads', [])
     
     result_list = []
     for t in threads:
